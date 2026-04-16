@@ -1,8 +1,10 @@
 import { PromoSection } from "@/components/PromoSection";
+import { ProductSection } from "@/components/ProductSection";
 
 export default function Home() {
   return (
     <main style={{ display: "flex", flexDirection: "column" }}>
+      <ProductSection headline="Ukens tilbud – brus" cardSize="md" />
       <PromoSection
         headline="Til under 200-lappen"
         body={`Det er tid for ukens billigste middag \n- og vi har gjort planleggingen for deg.`}
@@ -10,6 +12,7 @@ export default function Home() {
         secondaryCta={{ label: "Alle oppskrifter", href: "#" }}
         cardSize="md"
       />
+      <ProductSection headline="Populære produkter" cardSize="sm" />
       <PromoSection
         headline="Raske hverdagsmiddager"
         body="Under 30 minutter fra kjøleskap til middag."

@@ -16,6 +16,7 @@ A living prototype proving that Figma Responsive variables map 1:1 to CSS custom
 | RecipeCard Size=md | `2044:669` | Promo Section |
 | RecipeCard Size=lg | `2116:788` | Promo Section |
 | PromoSection | `2044:734` | Promo Section |
+| ProductCard (ComponentSet) | `2170:339` | Product Section |
 
 ## Architecture
 
@@ -59,6 +60,14 @@ component/card/md/min-width      ← size-specific
 component/card/md/max-width
 component/card/sm/min-width
 component/card/lg/min-width
+component/product-card/padding
+component/product-card/gap
+component/product-card/radius
+component/product-card/image-height
+component/product-card/md/min-width  ← size-specific
+component/product-card/md/max-width
+component/product-card/price-size
+component/product-card/badge-padding-x
 component/promo-section/padding-top
 component/promo-section/gap
 component/promo-section/min-width
@@ -74,6 +83,9 @@ Mirror the Figma variable name — replace `/` with `-` and add `--`:
 | `component/card/padding` | `--card-padding` |
 | `component/promo-section/gap` | `--promo-gap` |
 | `component/promo-section/padding-left` | `--promo-pl` |
+| `component/product-card/padding` | `--product-card-padding` |
+| `component/product-card/md/min-width` | `--product-card-md-min-width` |
+| `component/product-card/price-size` | `--product-card-price-size` |
 
 All CSS tokens live in `src/app/globals.css`.
 
