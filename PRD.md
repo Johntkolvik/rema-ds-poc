@@ -27,7 +27,8 @@ A design system where:
 
 - **Figma is the single source** for all design decisions — colors, spacing, typography, responsive behavior
 - **Code is generated from Figma** — not guessed, not copy-pasted, not re-typed
-- **Switching brands** is a single variable change — every color, every token flows automatically
+- **Switching brands** is selecting an Extended Collection — every color, every token flows automatically
+- **Dark mode** works out of the box — Semantics has Light/Dark modes, exported as `prefers-color-scheme`
 - **What you see in Figma is exactly what renders on the web** — same variables, same values, same breakpoints
 
 ---

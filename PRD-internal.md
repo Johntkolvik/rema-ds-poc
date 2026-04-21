@@ -1,7 +1,7 @@
 # PRD: TRY Design System — Figma → Code Pipeline (Intern)
 
 **Status:** Proof of Concept (validert)
-**Dato:** 2026-04-16
+**Sist oppdatert:** 2026-04-22
 **Eier:** John Kolvik, TRY Design
 **Figma:** [REMA Variable POC](https://www.figma.com/design/TPytjALjphlR0C6DJGvohU/REMA-Variable-POC--GitHub-)
 **Demo:** [rema-ds-poc.vercel.app](https://rema-ds-poc.vercel.app)
@@ -27,13 +27,15 @@ TRY bygger digitale løsninger for flere brands (REMA 1000, Uno X, Narvesen, Kol
 ### Token-kjeden (Figma → CSS)
 
 ```
-Figma Primitives (per brand: REMA, Uno X, Narvesen...)
+Figma Primitives (per brand: REMA, Uno X, Narvesen, Kolonihagen)
      ↓ aliaser
-Figma Semantics (brand-agnostiske: --button-primary-background, --card-title)
+Figma Semantics (Light/Dark modes)
+  ↳ Extended Collections per brand (Semantics/REMA, /Uno X, /Narvesen, /Kolonihagen)
+  ↳ Kun brand-spesifikke overrides — resten arves fra parent
      ↓ aliaser
-Figma Component tokens (--card-padding, --button-sm-height)
+Figma Responsive (SM → 2XL breakpoints + komponent-tokens)
      ↓ REST API eksport
-tokens.generated.css (642 CSS custom properties)
+tokens.generated.css (931 CSS custom properties inkl. dark mode)
      ↓ @import
 Komponenter bruker kun var(--token) — null hardkodede verdier
 ```
@@ -64,7 +66,7 @@ Primitives collection (5 modes):
 
 | Område | Status |
 |---|---|
-| Token-eksport fra Figma REST API | ✅ 642 variabler |
+| Token-eksport fra Figma REST API | ✅ 931 variabler (inkl. dark mode) |
 | Responsive tokens (5 breakpoints) | ✅ |
 | Semantisk fargekjede | ✅ |
 | Null media queries i komponenter | ✅ |
@@ -72,14 +74,16 @@ Primitives collection (5 modes):
 | Visuell Figma ↔ kode match | ✅ |
 | Code Connect | ✅ |
 | Custom font fra token | ✅ |
-| Multi-brand bytte | ⚠️ Struktur klar, ikke testet i kode |
-| Komponent-bibliotek | ⚠️ 4 av ~24 komponenter |
+| Dark mode | ✅ `@media (prefers-color-scheme: dark)` fra Semantics Dark mode |
+| Extended Collections (multi-brand) | ✅ Validert — per-node switching, side-by-side |
+| Multi-brand bytte i Figma | ✅ REMA/Uno X/Narvesen/Kolonihagen med korrekt kontrast |
+| Komponent-bibliotek | ⚠️ 6 av ~24 komponenter |
 
 ## Teknisk stack
 
 | Lag | Teknologi |
 |---|---|
-| Design | Figma Variables, Code Connect, Responsive modes |
+| Design | Figma Variables, Extended Collections, Code Connect, Responsive modes |
 | Token-eksport | Node.js → Figma REST API |
 | Frontend | Next.js 15 + Tailwind 4 |
 | Tokens | CSS custom properties (generert) |
@@ -191,9 +195,10 @@ Implementer Extended Collections for Semantics som neste strukturelt arbeid. Det
 
 ## Neste steg
 
-1. Fullfør Tier 1 primitiver
-2. Bygg Tier 2–3 komponenter
-3. Nodes API pipeline (automatisk komponent-CSS)
-4. CI/CD GitHub Action
-5. Multi-brand test (Uno X)
-6. Visuell regresjonstest
+1. ~~Multi-brand test (Uno X)~~ — **Validert.** Extended Collections fungerer per-node.
+2. Fullfør Tier 1 primitiver (Input, PriceDisplay)
+3. Bygg Tier 2–3 komponenter
+4. Nodes API pipeline (automatisk komponent-CSS)
+5. CI/CD GitHub Action for tokens:export
+6. Visuell regresjonstest (Figma screenshot vs web screenshot)
+7. Migrere on-brand workaround fra Primitives til Semantics extensions

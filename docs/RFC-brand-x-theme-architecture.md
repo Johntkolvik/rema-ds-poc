@@ -1,6 +1,6 @@
 # RFC: Brand × Theme — Variable Architecture
 
-**Status:** Open for discussion
+**Status:** Implemented and validated
 **Dato:** 2026-04-22
 **Forfatter:** John Kolvik, TRY Design
 **Berørte parter:** TRY, Shortcut, REMA MarTech
