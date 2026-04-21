@@ -66,6 +66,25 @@ function getBreakpoint(modeName) {
 // is exported as a single :root block (no responsive breakpoints).
 const RESPONSIVE_COLLECTION = "Responsive";
 
+/**
+ * Dark mode detection — if a collection has a mode whose name
+ * contains "dark" (case-insensitive), that mode becomes a
+ * @media (prefers-color-scheme: dark) block. The first non-dark
+ * mode becomes the default :root block.
+ */
+function classifyModes(modes) {
+  const light = [];
+  const dark = [];
+  for (const mode of modes) {
+    if (mode.name.toLowerCase().includes("dark")) {
+      dark.push(mode);
+    } else {
+      light.push(mode);
+    }
+  }
+  return { light, dark };
+}
+
 // ── Helpers ──────────────────────────────────────────────────────
 
 /** Figma variable name → CSS custom property name */
@@ -212,19 +231,40 @@ async function main() {
         totalVars += declarations.length;
       }
     } else {
-      // Non-responsive collection → single :root block (first/light mode)
-      const mode = collection.modes[0];
-      const declarations = [];
+      // Non-responsive collection — check for Light/Dark modes
+      const { light, dark } = classifyModes(collection.modes);
 
+      // Light / default mode → :root block
+      const lightMode = light[0] || collection.modes[0];
+      const lightDecl = [];
       for (const variable of collectionVars) {
-        const rawValue = variable.valuesByMode[mode.modeId];
+        const rawValue = variable.valuesByMode[lightMode.modeId];
         const cssValue = formatValue(rawValue, variable.resolvedType, varById);
         if (cssValue === null) continue;
-        declarations.push([toCssVar(variable.name), cssValue]);
+        lightDecl.push([toCssVar(variable.name), cssValue]);
       }
+      css += rootBlock(lightDecl) + "\n";
+      totalVars += lightDecl.length;
 
-      css += rootBlock(declarations) + "\n";
-      totalVars += declarations.length;
+      // Dark mode(s) → @media (prefers-color-scheme: dark) block
+      for (const darkMode of dark) {
+        const darkDecl = [];
+        for (const variable of collectionVars) {
+          const darkValue = variable.valuesByMode[darkMode.modeId];
+          const lightValue = variable.valuesByMode[lightMode.modeId];
+          const darkCss = formatValue(darkValue, variable.resolvedType, varById);
+          const lightCss = formatValue(lightValue, variable.resolvedType, varById);
+          if (darkCss === null) continue;
+          // Only emit if dark value differs from light
+          if (darkCss !== lightCss) {
+            darkDecl.push([toCssVar(variable.name), darkCss]);
+          }
+        }
+        if (darkDecl.length > 0) {
+          css += `@media (prefers-color-scheme: dark) {\n${rootBlock(darkDecl, "  ")}}\n\n`;
+          totalVars += darkDecl.length;
+        }
+      }
     }
   }
 
