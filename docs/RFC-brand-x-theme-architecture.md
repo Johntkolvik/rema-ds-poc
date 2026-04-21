@@ -36,6 +36,21 @@ Uno X sin primærfarge er lys (gul/grønn). Hvit tekst på lys bakgrunn = ulesel
 
 ---
 
+## Validert: Extended Collections fungerer per node
+
+Vi har testet Extended Collections i filen (Enterprise). Resultat:
+
+- `Semantics.extend('Semantics/Uno X')` → opprettet uten feil
+- Arver alle 114 variabler + Light/Dark modes automatisk
+- Override: `global/text/on-brand` → `color/neutral/900` (mørk) i Uno X Light
+- Applisert på en frame med `setExplicitVariableModeForCollection`
+- **Resultat: Uno X-knappene fikk mørk tekst, REMA og Narvesen beholdt hvit**
+- Alt side-by-side på samme canvas — fungerer som mode-bytte i layer-panelet
+
+Extended Collections er **ikke** fil-nivå overrides — de kan velges **per node**, akkurat som modes. Dette eliminerer den antatte trade-off mellom side-by-side preview og arv.
+
+---
+
 ## Tre mulige løsninger
 
 ### A) "On-brand" i Primitives (anbefalt nå)
