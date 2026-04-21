@@ -117,27 +117,40 @@ Semantics (parent)              → Light, Dark → 85 variabler
 
 ## Anbefaling
 
-### Kort sikt (nå → medio mai): Pattern A
+### Kort sikt (nå → medio mai): Pattern A som POC-workaround
 
-Implementer `color/brand/primary/on-primary` i Primitives. Det:
-- Løser Uno X-kontrastproblemet umiddelbart
-- Krever ingen nye Figma-features
-- Matcher hvordan Material Design og Reshaped gjør det
-- Er allerede implementert som workaround i POC-en
+Implementer `color/brand/primary/on-primary` i Primitives for å løse de akutte kontrastproblemene (Uno X). Dette er en **workaround**, ikke målarkitekturen.
 
-### Mellomlang sikt (juni → august): Evaluer Pattern C
+Akseptert gjeld: Semantiske beslutninger i Primitives. Fungerer for POC-formål.
 
-Når Figma fikser mode-hierarchy-buggen i Extended Collections:
-- Migrer de 3-4 "on-brand"-tokenene fra Primitives til Semantics-extensions
-- Test med designerne — er den mentale modellen forståelig?
-- Vurder om flere tokens trenger per-brand overrides
+### Produksjon (juni → august): Extended Collections er nødvendig
 
-### Langsiktig (post-launch): Full Extended Collections
+Når brands designes ordentlig, vil 30-40 av 85 semantiske tokens trenge per-brand overrides — ikke bare 4. Da holder ikke Pattern A fordi Primitives fylles med semantisk logikk som ikke hører hjemme der.
 
-Når vi har 5+ brands og designteam på tvers:
-- Extended Collections for både Primitives og Semantics
-- Separate tilgangskontroll per brand
-- Uavhengige oppdateringssykluser
+Extended Collections på Semantics er den **eneste skalerbare løsningen**:
+- Migrer on-brand tokens fra Primitives til Semantics-extensions
+- Design alle brand-avvik i riktig lag
+- Valider at mode-hierarchy-buggen er fikset (eller workaround)
+- Test den mentale modellen med designerne
+
+**NB:** Extended Collections endrer arbeidsflyt — brands kan ikke lenger vises side-by-side i én fil. Design-fasen (POC, QA, sammenligning) bruker fortsatt modes. Produksjons-filer per brand bruker extensions.
+
+### Anbefalt hybridmodell
+
+```
+POC / Design QA-fil:
+  → Primitives med brand-modes (side-by-side sammenligning)
+  → Semantics med Light/Dark
+  → Pattern A workaround for on-brand tokens
+
+Brand-spesifikke prosjektfiler (produksjon):
+  → Publisert Primitives-library (uten modes — base values)
+  → Extended Primitives per brand (overrider farger)
+  → Publisert Semantics-library (Light/Dark)
+  → Extended Semantics per brand (overrider 30-40 tokens)
+```
+
+Denne hybridmodellen lar oss beholde modes for design og preview, men bruke extensions for ren produksjonsarkitektur.
 
 ---
 
@@ -152,7 +165,7 @@ Basert på Uno X-testen er dette tokenene som trenger `on-brand`-varianter:
 | `button/primary/text` | hvit | mørk | Knappetekst |
 | `badge/primary/text` | hvit | mørk | Badge-tekst |
 
-Kun 4 tokens av 85 — noe som bekrefter at Pattern A er tilstrekkelig for nå.
+I POC-en er det kun 4 tokens som trenger overrides — men dette er fordi vi bare har testet én komponent med én problematisk brand. **I produksjon vil tallet være vesentlig høyere.** Når alle 85 semantiske tokens er ordentlig designet per brand, forventer vi 30-40+ overrides per brand: ulike hover-farger, feedback-farger, bakgrunnstoner, og visuell temperatur. Dette er et argument for at Extended Collections ikke er en "fin-å-ha" oppgradering, men en **nødvendighet** for produksjon.
 
 ---
 
