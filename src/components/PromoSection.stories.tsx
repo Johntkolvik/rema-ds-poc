@@ -14,6 +14,9 @@ const meta = {
   },
   argTypes: {
     cardSize: { control: 'select', options: ['sm', 'md', 'lg'] },
+    primaryCta: { control: 'object' },
+    secondaryCta: { control: 'object' },
+    cards: { control: false, table: { disable: true } },
   },
   args: {
     headline: 'Til under 200-lappen',
