@@ -9,11 +9,17 @@ import { RecipeCard } from "./RecipeCard";
 
 figma.connect(
   RecipeCard,
-  "https://www.figma.com/design/TPytjALjphlR0C6DJGvohU/REMA-Variable-POC--GitHub-?node-id=2116-804",
+  "https://www.figma.com/design/TPytjALjphlR0C6DJGvohU/REMA-Variable-POC--GitHub-?node-id=2342-8605",
   {
     props: {
       size: figma.enum("Size", { sm: "sm", md: "md", lg: "lg" }),
     },
+    links: [
+      {
+        name: "Storybook",
+        url: "https://rema-storybook.vercel.app/?path=/story/components-recipecard--default",
+      },
+    ],
     example: ({ size }) => (
       <RecipeCard
         size={size}

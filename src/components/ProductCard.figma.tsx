@@ -11,6 +11,12 @@ figma.connect(
   ProductCard,
   "https://www.figma.com/design/TPytjALjphlR0C6DJGvohU/REMA-Variable-POC--GitHub-?node-id=2170-339",
   {
+    links: [
+      {
+        name: "Storybook",
+        url: "https://rema-storybook.vercel.app/?path=/story/components-productcard--default",
+      },
+    ],
     props: {
       size: figma.enum("Size", { sm: "sm", md: "md", lg: "lg" }),
     },

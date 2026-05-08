@@ -11,6 +11,12 @@ figma.connect(
   PromoSection,
   "https://www.figma.com/design/TPytjALjphlR0C6DJGvohU/REMA-Variable-POC--GitHub-?node-id=2044-734",
   {
+    links: [
+      {
+        name: "Storybook",
+        url: "https://rema-storybook.vercel.app/?path=/story/components-promosection--default",
+      },
+    ],
     props: {
       // When card size variant is added to Figma, map it here:
       // cardSize: figma.enum("Card size", { sm: "sm", md: "md", lg: "lg" }),

@@ -13,12 +13,13 @@ A living prototype proving that Figma variables (responsive, semantic, and brand
 
 | Component | Node ID | Page |
 |---|---|---|
-| RecipeCard (ComponentSet) | `2116:804` | Promo Section |
+| RecipeCard (ComponentSet) | `2342:8605` | Promo Section |
+| RecipeCard.Meta-Fields | `2851:22738` | Promo Section |
 | PromoSection | `2044:734` | Promo Section |
 | ProductCard (ComponentSet) | `2170:339` | Product Section |
-| Button (ComponentSet, 36 variants) | `2136:1324` | --- Content Blocks |
+| Button (ComponentSet, 72 variants: Style×Size×State×Shape) | `2136:1324` | --- Content Blocks |
 | Badge (ComponentSet, 3 variants) | `2154:2660` | --- Content Blocks |
-| icon/arrow-right | `2134:6806` | --- Content Blocks |
+| icon/arrow-right | `2134:6806` | --- Content Blocks (unverified) |
 
 ## Architecture
 
@@ -154,11 +155,52 @@ npm run figma:publish
 ## Commands
 
 ```bash
-npm run dev             # Start dev server (http://localhost:3000)
-npm run tokens:export   # Export 931 variables from Figma REST API → tokens.generated.css
-npm run figma:publish   # Publish Code Connect mappings to Figma
-npm run build           # Production build
+npm run dev              # Start dev server (http://localhost:3000)
+npm run storybook        # Start Storybook (http://localhost:6006)
+npm run build-storybook  # Static Storybook build → storybook-static/
+npm run tokens:export    # Export 931 variables from Figma REST API → tokens.generated.css
+npm run figma:publish    # Publish Code Connect mappings to Figma
+npm run build            # Production build
 ```
+
+## Storybook
+
+Storybook 10 is set up as the canonical design-system documentation surface. Each component has a `.stories.tsx` file co-located with the component. Stories link back to Figma via the `parameters.design` field, using the `figmaUrl()` helper from `.storybook/preview.ts`.
+
+**Addons enabled:**
+- `@storybook/addon-a11y` — axe-core accessibility checks (WCAG / Norwegian UU). Configured as `test: 'todo'` in `.storybook/preview.ts`; flip to `'error'` to fail CI on violations.
+- `@storybook/addon-designs` — embeds the Figma frame in the addon panel for side-by-side review.
+- `@storybook/addon-vitest` — story-level tests via Vitest.
+- `@chromatic-com/storybook` — visual regression baseline (Chromatic).
+
+**Adding a new story:**
+
+```tsx
+// src/components/MyComponent.stories.tsx
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { MyComponent } from './MyComponent';
+import { figmaUrl } from '../../.storybook/preview';
+
+const meta = {
+  title: 'Components/MyComponent',
+  component: MyComponent,
+  parameters: {
+    design: { type: 'figma', url: figmaUrl('NODE:ID') },
+  },
+} satisfies Meta<typeof MyComponent>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+export const Default: Story = {};
+```
+
+**QA / QC workflow (design ↔ code):**
+1. Designer updates Figma component
+2. Developer runs `npm run tokens:export` if tokens changed
+3. Developer updates React component to match
+4. Story renders the updated component side-by-side with the embedded Figma frame in Storybook
+5. a11y panel verifies WCAG/UU compliance
+6. `npm run figma:publish` updates Code Connect snippets shown in Figma Dev Mode
 
 ## Token storage
 
@@ -171,5 +213,6 @@ npm run build           # Production build
 |---|---|
 | `PRD.md` | English presentation-ready PRD |
 | `PRD-internal.md` | Norwegian internal reference |
+| `docs/STORYBOOK.md` | Storybook-konvensjon (når separat story vs. control, navngivning, a11y-strategi) |
 | `docs/RFC-brand-x-theme-architecture.md` | Brand × Theme architecture analysis |
 | `docs/meeting-notes-2026-04-21.md` | REMA/Shortcut meeting notes + action items |
