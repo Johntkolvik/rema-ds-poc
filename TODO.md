@@ -12,38 +12,37 @@
 
 ## Prioritert — knyttet direkte til Beates tre mål
 
-### 1. Figma-filens eierskap — avklart, men reiser et nytt spørsmål
+### 1. Figma-filens eierskap — avklart, bevisst valg, ikke en risiko
 **Mål: eid av REMA.** Bekreftet 4. sept: "REMA.no Design System"
 (`TPytjALjphlR0C6DJGvohU`) ligger på **TRYs egen Figma Enterprise-konto**, ikke
-REMAs. REMA har i dag bare View-sete på sin egen org (`REMA 1000`, tier `org`) og
-ingen tilgang til å redigere filen slik den ligger nå.
+REMAs. REMA har i dag bare View-sete på sin egen org (`REMA 1000`, tier `org` —
+ikke Enterprise, så Extended Collections m.m. ville uansett ikke fungert der).
 
-Foreslått løsning fra John: dele prosjektet med REMA via Figma **Shared Project**
-(Enterprise-funksjon for tverr-org-samarbeid) — REMAs designere kunne da jobbe i
-filen med sin egen REMA-lisens, mens TRY fortsatt drifter Enterprise-funksjonaliteten
-rundt (variabler, Code Connect, publisering).
+**Retning avklart med John 4. sept:**
+- Planen er **Figma Shared Project**: REMAs designere jobber i filen med sitt eget
+  REMA-sete, mens TRY fortsatt drifter Enterprise-funksjonaliteten (Extended
+  Collections, variabler, publisering) rundt. Bevisst valg — å bli på TRYs
+  Enterprise-konto nå er *viktigere* enn formelt eierskap i denne fasen, nettopp
+  fordi REMAs egen org ikke er Enterprise ennå.
+- Parallelt løp (utenfor denne repoens scope): John har vært i kontakt med Figma om
+  å få dem til å kontakte **Reitan** (morselskapet til REMA 1000, Uno-X, 7-Eleven,
+  Narvesen) for å flytte Reitan-konsernet over på Figma Enterprise. Når/hvis det
+  skjer, er det naturlig tidspunkt å vurdere reell overføring av filen til Reitan/
+  REMAs egen org — ikke noe å løse nå.
+- **Rettet misforståelse fra meg:** `Primitives/Holzweiler` / `Kokkeløren` /
+  `Bjørklund` er **ikke** andre TRY-kunders konfidensielle data — det er
+  plassholdernavn brukt for å teste multi-brand-prinsippet, og skal renames til de
+  faktiske Reitan-merkene: **UNO-X, Kjeldsberg, 7-Eleven, Narvesen**. (F.eks. blir
+  `--brand` gul for UNO-X, ikke blå som REMA.) Ingen konfidensialitetsrisiko ved
+  Shared Project — dropper sjekkpunktene fra forrige versjon av dette punktet.
 
-**Vurdering:**
-- Shared Project er riktig *mekanisme* for akkurat dette scenarioet (byrå eier
-  workspace, kunde samarbeider med eget sete) — teknisk sett løser det målet om at
-  flere (REMA-)designere kan jobbe i filen.
-- Men det er **deling, ikke eierskapsoverføring**. Filen tilhører fortsatt
-  administrativt TRYs org — hvis TRYs Figma-avtale endres eller opphører, mister
-  REMA tilgang til sitt eget designsystem. Løser ikke "eid av REMA" i streng
-  forstand, bare det praktiske samarbeidsproblemet.
-- **Konkret risiko vi selv fant 4. sept:** denne filen inneholder også primitiv-
-  samlinger for andre TRY-kunder i samme fil — `Primitives/Holzweiler`,
-  `Primitives/Kokkeløren`, `Primitives/Bjørklund` — side om side med
-  `Primitives/REMA` under en felles `DS Framework`. Deler man prosjektet med REMA,
-  får REMAs designere trolig også se disse. Ikke verifisert hvor mye (bare
-  fargeprimitiver, eller mer), men bør avklares **før** deling, ikke etterpå.
-
-- [ ] Avklar med Beate om Shared Project er godt nok for "eid av REMA"-målet, eller
-      om det på sikt skal bli en reell overføring til REMAs org
-- [ ] Sjekk nøyaktig hva `Primitives/Holzweiler` / `Kokkeløren` / `Bjørklund` faktisk
-      inneholder, og om det er greit at REMA ser det
-- [ ] Hvis ikke greit: skill ut REMA-relevante collections til en egen fil (eller
-      dupliser til en REMA-only-fil) før Shared Project opprettes
+- [ ] Rename `Primitives/Holzweiler` → `Primitives/Uno-X`,
+      `Primitives/Kokkeløren` → `Primitives/Kjeldsberg`,
+      `Primitives/Bjørklund` → `Primitives/7-Eleven` (+ legg til Narvesen) når
+      multi-brand-testingen er klar for det — ikke fase 1-prioritet
+- [ ] Opprett Shared Project og gi REMAs designere tilgang med eget sete
+- [ ] Følg opp Figma/Reitan-Enterprise-samtalen som eget spor; vurder reell
+      overføring av filen først når/hvis Reitan er på Enterprise
 
 ### 2. Skriv ned dømmekraftlaget i produksjonsrepoet
 **Mål: vedlikeholdbart av flere designere.** `packages/tokens/src/semantics.css` i
