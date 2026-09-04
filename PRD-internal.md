@@ -1,17 +1,18 @@
 # PRD: TRY Design System — Figma → Code Pipeline (Intern)
 
-**Status:** Proof of Concept (validert)
-**Sist oppdatert:** 2026-04-22
+**Status:** POC validert (fase 1) → produksjonsmodning (fase 2, pågår)
+**Sist oppdatert:** 2026-09-04
 **Eier:** John Kolvik, TRY Design
-**Figma:** [REMA Variable POC](https://www.figma.com/design/TPytjALjphlR0C6DJGvohU/REMA-Variable-POC--GitHub-)
+**Figma:** [REMA.no Design System](https://www.figma.com/design/TPytjALjphlR0C6DJGvohU/) — samme filnøkkel som tidligere "REMA-Variable-POC", men filen ble 4. sept 2026 gjort om til TRYs løpende arbeidsfil for det faktiske rema.no-designsystemet. Ligger på TRYs Figma Enterprise-konto; plan om Shared Project for REMAs designere (se `TODO.md`).
 **Demo:** [rema-ds-poc.vercel.app](https://rema-ds-poc.vercel.app)
 **Repo:** [github.com/Johntkolvik/rema-ds-poc](https://github.com/Johntkolvik/rema-ds-poc)
+**Relaterte dokumenter:** `CLAUDE.md` (teknisk regelverk + filstatus), `DESIGN.md` (dømmekraftlag for tokens), `TODO.md` (levende tiltaksliste knyttet til målene under), `docs/meeting-notes-2026-08-26.md`
 
 ---
 
 ## Problem
 
-TRY bygger digitale løsninger for flere brands (REMA 1000, Uno X, Narvesen, Kolonihagen m.fl.). I dag:
+TRY bygger digitale løsninger for flere brands i Reitan-familien (REMA 1000, Uno-X, Kjeldsberg, 7-Eleven, Narvesen — og potensielt Reitan-konsernet selv som egen merkevare). I dag:
 
 1. **Figma og kode er to separate sannheter** — designere lager tokens i Figma, utviklere hardkoder verdier i CSS. Drift over tid er uunngåelig.
 2. **Responsive oppførsel er manuell** — utviklere skriver media queries basert på designerens intensjon, ikke eksakte verdier.
@@ -22,23 +23,47 @@ TRY bygger digitale løsninger for flere brands (REMA 1000, Uno X, Narvesen, Kol
 
 **Én komponent, én sannhet, alle brands.**
 
+## Mål for denne fasen (avklart med Beate Gundersen, app-teamet REMA — sept 2026)
+
+POC-en har bevist at mekanismen virker (se under). Det er ikke lenger spørsmålet.
+Beate har satt tre føringer som nå definerer om prosjektet lykkes:
+
+1. **Designsystemet skal eies av REMA** — ikke være avhengig av at TRY drifter det.
+   I dag ligger arbeidsfilen på TRYs Figma Enterprise-konto (REMAs egen org er ikke
+   Enterprise-tier ennå). Planlagt bro: Figma Shared Project, slik at REMAs
+   designere jobber i filen med eget sete. Reell overføring er et eget spor —
+   TRY er i dialog med Figma om å få Reitan-konsernet over på Enterprise.
+2. **Vedlikeholdbart av flere designere — ikke avhengig av én person.** Krever et
+   skrevet dømmekraftlag (se `DESIGN.md`) og en synk-prosess som ikke er avhengig av
+   at én person husker å trigge den manuelt.
+3. **Funksjonelt nok innen utgangen av november, senest midten av desember.** Dette
+   er *ikke* bundet til rema.no-lanseringen 22. september — den fristen gjelder
+   nettsiden, ikke designsystemet.
+
+Se `TODO.md` for det løpende tiltaksarbeidet mot disse tre målene.
+
 ## Arkitektur
 
 ### Token-kjeden (Figma → CSS)
 
 ```
-Figma Primitives (per brand: REMA, Uno X, Narvesen, Kolonihagen)
+Figma Primitives (per brand: REMA, Uno-X, Kjeldsberg, 7-Eleven, Narvesen, [Reitan])
      ↓ aliaser
 Figma Semantics (Light/Dark modes)
-  ↳ Extended Collections per brand (Semantics/REMA, /Uno X, /Narvesen, /Kolonihagen)
+  ↳ Extended Collections per brand (Semantics/REMA, /Uno-X, /Narvesen, ...)
   ↳ Kun brand-spesifikke overrides — resten arves fra parent
      ↓ aliaser
 Figma Responsive (SM → 2XL breakpoints + komponent-tokens)
      ↓ REST API eksport
-tokens.generated.css (931 CSS custom properties inkl. dark mode)
+tokens.generated.css (730 variabler → 2586 CSS custom properties inkl. dark mode,
+etter restruktureringen av filen 4. sept 2026 — se CLAUDE.md)
      ↓ @import
 Komponenter bruker kun var(--token) — null hardkodede verdier
 ```
+
+> Brand-listen ovenfor er testdata for multi-brand-prinsippet (i filen i dag under
+> plassholdernavn `Holzweiler`/`Kokkeløren`/`Bjørklund` — skal renames). `Reitan`
+> som egen merkevare i systemet er foreslått, ikke bygget ennå.
 
 ### Responsive-kjeden
 
@@ -54,19 +79,24 @@ Figma Responsive collection (5 modes)
 ### Brand-kjeden
 
 ```
-Primitives collection (5 modes):
-  DEFAULT → fallback
-  REMA    → #023ea5, #d71f2e
-  Uno X   → Uno X palett
-  Narvesen→ Narvesen palett
-  Kolonihagen → Kolonihagen palett
+Primitives collection (modes, oppdatert sept 2026):
+  DEFAULT     → fallback
+  REMA        → #023ea5, #d71f2e (brand = blå)
+  Uno-X       → gul brand-primær (brand-alias peker på gult, ikke blått)
+  Kjeldsberg  → Kjeldsberg-palett
+  7-Eleven    → 7-Eleven-palett
+  Narvesen    → Narvesen-palett
+  [Reitan]    → foreslått lagt til — konsernets egen distinkte merkevare
 ```
+
+Kolonihagen er tatt ut av brand-listen; erstattet av de faktiske Reitan-eide
+kjedene (Uno-X, Kjeldsberg, 7-Eleven) i tillegg til Narvesen.
 
 ## Hva POC-en har bevist
 
 | Område | Status |
 |---|---|
-| Token-eksport fra Figma REST API | ✅ 931 variabler (inkl. dark mode) |
+| Token-eksport fra Figma REST API | ✅ 730 variabler → 2586 CSS-egenskaper (inkl. dark mode) |
 | Responsive tokens (5 breakpoints) | ✅ |
 | Semantisk fargekjede | ✅ |
 | Null media queries i komponenter | ✅ |
@@ -92,14 +122,22 @@ Primitives collection (5 modes):
 ## Komponenter
 
 ### Tier 1: Primitiver
-- ✅ Button (36 varianter: 4 styles × 3 sizes × 3 states + ikon-booleans)
-- ✅ Badge (3 varianter: Primary/Danger/Subtle)
+- ✅ Button (36 varianter: 4 styles × 3 sizes × 3 states + ikon-booleans) — matcher produksjon (`@rema/ui` har delt Button)
+- ⚠️ Badge (3 varianter: Primary/Danger/Subtle) — **POC-only.** Ingen tilsvarende komponent i produksjon (verken kode eller Storybook). Holdes som demo av token-mekanikken, ikke en spec.
 - ❌ Input
 - ❌ PriceDisplay
 
 ### Tier 2: Kort
-- ✅ RecipeCard (sm/md/lg) — Figma + kode + Code Connect
-- ❌ RecipeCategoryCard, NewsCard, ArticleHighlightCard, ProductCard
+- ✅ RecipeCard (sm/md/lg) — Figma + kode + Code Connect, matcher produksjon
+- ❌ RecipeCategoryCard, NewsCard, ArticleHighlightCard
+- 🔜 **ProductCard** — bevisst utsatt, ikke droppet. Figma-filen markerer den
+  "skal ikke utvikles" for *web-fasen* (rema.no-lansering 22. sept), og
+  produksjonsmirroren har ingen `product-card`. Men: nå som **appen** blir en del
+  av produktkort-arbeidet, blir dette et reelt to-do i en senere fase — ProductCard
+  er et godt eksempel på en **multi-kanal-komponent** (web, app, evt. kasse) med
+  ting som prisstruktur og prisvisning/-logikk som må holde seg konsistent på tvers
+  av kanaler. Hold komponenten i denne POC-en som demo av mekanismen; ikke bygg den
+  videre som spec før app-siden er avklart med eierne.
 
 ### Tier 3: Seksjoner
 - ✅ PromoSection — Figma + kode + Code Connect
@@ -195,10 +233,16 @@ Implementer Extended Collections for Semantics som neste strukturelt arbeid. Det
 
 ## Neste steg
 
-1. ~~Multi-brand test (Uno X)~~ — **Validert.** Extended Collections fungerer per-node.
+**Mot Beates tre mål (se `TODO.md` for oppdatert, prioritert liste):**
+1. Avklar Figma Shared Project + Reitan/Enterprise-sporet (eierskap)
+2. Skriv ned dømmekraftlaget i produksjonsrepoet (port av `DESIGN.md`)
+3. Automatiser drift-oppdagelse for token-synk i produksjon (ingen CI-sjekk i dag)
+4. Sett opp Code Connect i produksjonsrepoet
+
+**Gjenstående fra fase 1 (mekanisk fullføring, lavere prioritet enn målene over):**
+1. ~~Multi-brand test (Uno X)~~ — **Validert.** Extended Collections fungerer per-node. Bør re-valideres med korrekt brand-liste (Uno-X/Kjeldsberg/7-Eleven/Narvesen).
 2. Fullfør Tier 1 primitiver (Input, PriceDisplay)
-3. Bygg Tier 2–3 komponenter
+3. Bygg Tier 2–3 komponenter (unntatt ProductCard — se komponentstatus over)
 4. Nodes API pipeline (automatisk komponent-CSS)
-5. CI/CD GitHub Action for tokens:export
-6. Visuell regresjonstest (Figma screenshot vs web screenshot)
-7. Migrere on-brand workaround fra Primitives til Semantics extensions
+5. Visuell regresjonstest (Figma screenshot vs web screenshot)
+6. Migrere on-brand workaround fra Primitives til Semantics extensions
