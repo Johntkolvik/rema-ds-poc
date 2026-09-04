@@ -217,8 +217,8 @@ export const Default: Story = {};
 
 | Document | Purpose |
 |---|---|
-| `PRD.md` | English presentation-ready PRD |
-| `PRD-internal.md` | Norwegian internal reference |
+| `README.md` | Project overview — problem/vision in English (stable, rarely changes) |
+| `PRD-internal.md` | Current status, goals, and roadmap (Norwegian, living document) |
 | `docs/STORYBOOK.md` | Storybook-konvensjon (når separat story vs. control, navngivning, a11y-strategi) |
 | `docs/RFC-brand-x-theme-architecture.md` | Brand × Theme architecture analysis |
 | `docs/meeting-notes-2026-04-21.md` | REMA/Shortcut meeting notes + action items |

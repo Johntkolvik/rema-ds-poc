@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TRY Design System — Figma to Code Pipeline (POC)
 
-## Getting Started
+A living prototype proving that Figma variables (responsive, semantic, and brand)
+map 1:1 to CSS custom properties. See [`CLAUDE.md`](CLAUDE.md) for the full
+architecture and rules, and [`PRD-internal.md`](PRD-internal.md) for current
+status, goals, and roadmap (Norwegian).
 
-First, run the development server:
+## The problem
+
+TRY builds digital products for multiple brands in the Reitan family (REMA 1000,
+Uno-X, Kjeldsberg, 7-Eleven, Narvesen, and potentially Reitan itself). Today,
+design and code live as two separate truths that drift apart over time:
+designers set spacing and colors in Figma, developers re-type those values in
+CSS; responsive behavior is communicated via static mockups and interpreted by
+hand; each brand's component library is copy-pasted rather than shared; and there
+is no automated link between a Figma variable and the CSS it should produce.
+
+## The vision
+
+**One component. One source of truth. Every brand.**
+
+A design system where Figma is the single source for all design decisions —
+colors, spacing, typography, responsive behavior — code is generated from Figma
+rather than guessed or re-typed, switching brands is selecting one Extended
+Collection, and what you see in Figma is exactly what renders on the web.
+
+This repo is the proof that the mechanism works. Whether it's ready to carry that
+promise into production is tracked separately — see `PRD-internal.md` and
+`TODO.md`.
+
+## Development
+
+Built with [Next.js](https://nextjs.org) 15 + Tailwind 4.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev              # http://localhost:3000
+npm run storybook        # http://localhost:6006
+npm run tokens:export    # regenerate tokens.generated.css from Figma
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+See [`CLAUDE.md`](CLAUDE.md) for the full command reference, the Figma variable
+naming conventions, and the workflow for adding a new component.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Learn more about Next.js
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [Next.js Documentation](https://nextjs.org/docs) — learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) — an interactive Next.js tutorial.
 
 ## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Deployed at [rema-ds-poc.vercel.app](https://rema-ds-poc.vercel.app). See the
+[Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying)
+for details on deploying your own instance.
