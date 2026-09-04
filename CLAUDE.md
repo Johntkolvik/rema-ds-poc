@@ -7,19 +7,25 @@ A living prototype proving that Figma variables (responsive, semantic, and brand
 ## Figma file
 
 - **File key:** `TPytjALjphlR0C6DJGvohU`
-- **URL:** https://www.figma.com/design/TPytjALjphlR0C6DJGvohU/REMA-Variable-POC--GitHub-
+- **URL:** https://www.figma.com/design/TPytjALjphlR0C6DJGvohU/
+- **File name (as of 2026-09-04):** "REMA.no Design System" — this key was repurposed from the original isolated "REMA-Variable-POC" file into TRY's live rema.no design file (confirmed via REST API, `lastModified: 2026-09-04T15:30:39Z`). Treat this as **the** REMA file going forward; there is no separate POC file key.
+- The file's page structure and variable collections were substantially reorganized as part of that change (multiple `Responsive`/`Semantics`/`Primitives` collections now exist, plus other TRY clients' brand primitives — `Primitives/Holzweiler`, `Primitives/Kokkeløren`, `Primitives/Bjørklund` — sitting alongside `Primitives/REMA` under a shared `DS Framework`). Variable count is now 730 (not 931), so anything below quoting exact counts should be re-verified with `npm run tokens:export` before being trusted.
 
 ### Key node IDs
 
-| Component | Node ID | Page |
-|---|---|---|
-| RecipeCard (ComponentSet) | `2342:8605` | Promo Section |
-| RecipeCard.Meta-Fields | `2851:22738` | Promo Section |
-| PromoSection | `2044:734` | Promo Section |
-| ProductCard (ComponentSet) | `2170:339` | Product Section |
-| Button (ComponentSet, 72 variants: Style×Size×State×Shape) | `2136:1324` | --- Content Blocks |
-| Badge (ComponentSet, 3 variants) | `2154:2660` | --- Content Blocks |
-| icon/arrow-right | `2134:6806` | --- Content Blocks (unverified) |
+> **Unverified since the 2026-09-04 restructure.** The page names below ("Promo Section", "Product Section") no longer appear in the file's page list — it now has pages like "◤ Content Blocks › Promo section", "◤ Cards › Recipe card / Campaign card / Product card". Node IDs likely need re-resolving.
+
+> **ProductCard and Badge are POC-only — not aligned with production.** The Figma file marks Product Card "(skal ikke utvikles)" ("not to be developed"), and confirmed against the production mirror (`github.com/tryhuset/rema.no`, 2026-09-04): no `product-card` or `badge` component exists there, in code or in Storybook. Both remain in this repo only to demonstrate the token mechanism (sizing, color, responsive binding) — treat them as a demo, never as a spec to build against. Do not extend either one; raise real product-card needs with the Figma file owner instead.
+
+| Component | Node ID | Page | Status |
+|---|---|---|---|
+| RecipeCard (ComponentSet) | `2342:8605` | Promo Section | Matches production |
+| RecipeCard.Meta-Fields | `2851:22738` | Promo Section | Matches production |
+| PromoSection | `2044:734` | Promo Section | Matches production |
+| ProductCard (ComponentSet) | `2170:339` | Product Section | **POC-only — not built in production, Figma marks it "skal ikke utvikles"** |
+| Button (ComponentSet, 72 variants: Style×Size×State×Shape) | `2136:1324` | --- Content Blocks | Matches production (`@rema/ui` has a shared `Button`) |
+| Badge (ComponentSet, 3 variants) | `2154:2660` | --- Content Blocks | **POC-only — no equivalent in production code or Storybook** |
+| icon/arrow-right | `2134:6806` | --- Content Blocks (unverified) | Unverified |
 
 ## Architecture
 
